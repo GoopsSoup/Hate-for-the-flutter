@@ -1,34 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_last_app/layout/Home.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-void main() {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-  ));
-  runApp(const GamePage());
-}
-
-class GamePage extends StatelessWidget {
-  const GamePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Game Detail',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
-      ),
-      home: const GameDetailScreen(),
-    );
-  }
-}
-
-// ── Data ────────────────────────────────────────────────────────────────────
+// ── Data ─────────────────────────────────────────────────────────────────────
 
 const _tags = [
   'Souls-like', 'Action', 'RPG', 'Story-rich',
@@ -39,29 +11,25 @@ const _tags = [
 const _features = [
   (
     title: 'A DARKLY ELEGANT AND CRUEL WORLD',
-    body:
-        'Unearth the secrets of the city of Krat – a place soaked in the style of '
+    body: 'Unearth the secrets of the city of Krat – a place soaked in the style of '
         'the Belle Epoque era which once thrived due to its puppet industry and now '
         'sees its streets covered in blood.',
   ),
   (
     title: 'BATTLE WITH TWISTED INSTRUMENTS',
-    body:
-        'Develop a unique combat style to counter vicious enemies and terrain by '
+    body: 'Develop a unique combat style to counter vicious enemies and terrain by '
         'weaving together dynamic weapon combinations, utilizing the Legion Arms, '
         'and activating new abilities.',
   ),
   (
     title: "WHAT'S IN A LIE?",
-    body:
-        'There will be times when you will be confronted with choices where you can '
+    body: 'There will be times when you will be confronted with choices where you can '
         'give comfort to others in sorrow or despair by lying…or you can choose to '
         'tell the truth.\n\nCarve your own path.',
   ),
   (
     title: 'A CLASSIC REIMAGINED',
-    body:
-        'Experience the beloved fairy tale of Pinocchio reinterpreted as a dark, '
+    body: 'Experience the beloved fairy tale of Pinocchio reinterpreted as a dark, '
         'grim narrative that allows players to discover the secrets and symbols '
         'hidden within the world of Lies of P.',
   ),
@@ -87,30 +55,33 @@ const _recReqs = [
   'STORAGE: 50 GB available space',
 ];
 
-// ── Screen ───────────────────────────────────────────────────────────────────
+final _bodyStyle = TextStyle(
+  color: Colors.white.withOpacity(0.7),
+  fontSize: 13.5,
+  height: 1.65,
+);
 
-class GameDetailScreen extends StatefulWidget {
-  const GameDetailScreen({super.key});
+// ── Entry point (no MaterialApp) ─────────────────────────────────────────────
+
+class GamePage extends StatefulWidget {
+  const GamePage({super.key});
 
   @override
-  State<GameDetailScreen> createState() => _GameDetailScreenState();
+  State<GamePage> createState() => _GamePageState();
 }
 
-class _GameDetailScreenState extends State<GameDetailScreen>
-    with SingleTickerProviderStateMixin {
+class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin {
   bool _wishlisted = false;
-  late AnimationController _ac;
-  late Animation<double> _fade;
-  late Animation<Offset> _slide;
+  late final AnimationController _ac;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
 
   @override
   void initState() {
     super.initState();
-    _ac = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 700));
+    _ac = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
     _fade = CurvedAnimation(parent: _ac, curve: Curves.easeOut);
-    _slide = Tween<Offset>(
-            begin: const Offset(0, 0.06), end: Offset.zero)
+    _slide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
         .animate(CurvedAnimation(parent: _ac, curve: Curves.easeOutCubic));
     _ac.forward();
   }
@@ -131,69 +102,50 @@ class _GameDetailScreenState extends State<GameDetailScreen>
           position: _slide,
           child: CustomScrollView(
             slivers: [
-              // ── Hero banner ──────────────────────────────────────────────
-              SliverToBoxAdapter(child: _HeroBanner(onBack: () {})),
-
-              // ── Tags + rating ────────────────────────────────────────────
+              SliverToBoxAdapter(child: _HeroBanner()),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Wrap(
                         spacing: 6,
                         runSpacing: 6,
-                        children: _tags
-                            .map((t) => _Tag(label: t))
-                            .toList(),
+                        children: _tags.map((t) => _Tag(label: t)).toList(),
                       ),
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          const Icon(Icons.star_rounded,
-                              color: Color(0xFFFFCC00), size: 16),
+                          const Icon(Icons.star_rounded, color: Color(0xFFFFCC00), size: 16),
                           const SizedBox(width: 4),
                           const Text('4.6',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14)),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
                           const SizedBox(width: 4),
                           Text('(2.4k reviews)',
-                              style: TextStyle(
-                                  color: Colors.white.withOpacity(0.4),
-                                  fontSize: 12)),
+                              style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 12)),
                         ],
                       ),
                     ],
                   ),
                 ),
               ),
-
-              // ── Buy + Wishlist ───────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Row(
                     children: [
-                      Expanded(child: _BuyButton(onTap: () {})),
+                      Expanded(child: _BuyButton()),
                       const SizedBox(width: 10),
                       _WishlistButton(
                         active: _wishlisted,
-                        onTap: () =>
-                            setState(() => _wishlisted = !_wishlisted),
+                        onTap: () => setState(() => _wishlisted = !_wishlisted),
                       ),
                     ],
                   ),
                 ),
               ),
-
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
-              // ── About ────────────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -210,9 +162,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         style: _bodyStyle,
                       ),
                       const SizedBox(height: 16),
-                      // Placeholder image 1
-                      _PlaceholderImage(
-                          label: 'Gameplay Screenshot', height: 180),
+                      _PlaceholderImage(label: 'Gameplay Screenshot', height: 180),
                       const SizedBox(height: 16),
                       Text(
                         'You are awakened by a mysterious voice that guides you through '
@@ -225,30 +175,23 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                         style: _bodyStyle,
                       ),
                       const SizedBox(height: 16),
-                      _PlaceholderImage(
-                          label: 'Boss Battle', height: 180),
+                      _PlaceholderImage(label: 'Boss Battle', height: 180),
                       const SizedBox(height: 24),
                     ],
                   ),
                 ),
               ),
-
-              // ── Feature bullets ──────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: _features
-                        .map((f) => _FeatureTile(
-                            title: f.title, body: f.body))
+                        .map((f) => _FeatureTile(title: f.title, body: f.body))
                         .toList(),
                   ),
                 ),
               ),
-
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
-              // ── System Requirements ──────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -264,23 +207,18 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                   ),
                 ),
               ),
-
-              // ── Footer ───────────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 28, 16, 12),
                   child: Text(
                     '© NEOWIZ All rights reserved.',
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.28),
-                        fontSize: 11),
+                    style: TextStyle(color: Colors.white.withOpacity(0.28), fontSize: 11),
                   ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Wrap(
                     spacing: 16,
                     children: ['Privacy Policy', 'Legal', 'Accessibility', 'Cookies']
@@ -289,8 +227,7 @@ class _GameDetailScreenState extends State<GameDetailScreen>
                                 color: Colors.white.withOpacity(0.35),
                                 fontSize: 11,
                                 decoration: TextDecoration.underline,
-                                decorationColor:
-                                    Colors.white.withOpacity(0.25))))
+                                decorationColor: Colors.white.withOpacity(0.25))))
                         .toList(),
                   ),
                 ),
@@ -304,19 +241,16 @@ class _GameDetailScreenState extends State<GameDetailScreen>
   }
 }
 
-// ── Hero banner ───────────────────────────────────────────────────────────────
+// ── Hero Banner ───────────────────────────────────────────────────────────────
 
 class _HeroBanner extends StatelessWidget {
-  final VoidCallback onBack;
-  const _HeroBanner({required this.onBack});
+  const _HeroBanner();
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Placeholder art
         _PlaceholderImage(label: 'Game Cover Art', height: 240, radius: 0),
-        // Gradient fade to bg
         Positioned.fill(
           child: DecoratedBox(
             decoration: BoxDecoration(
@@ -333,23 +267,19 @@ class _HeroBanner extends StatelessWidget {
             ),
           ),
         ),
-        // Back button + title bar
         Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
+          top: 0, left: 0, right: 0,
           child: SafeArea(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: onBack,
+                    onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.45),
+                        color: Colors.black38,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(Icons.arrow_back_ios_new_rounded,
@@ -359,11 +289,7 @@ class _HeroBanner extends StatelessWidget {
                   const SizedBox(width: 10),
                   const Text(
                     'Lies Of P',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
@@ -375,18 +301,14 @@ class _HeroBanner extends StatelessWidget {
   }
 }
 
-// ── Placeholder image ─────────────────────────────────────────────────────────
+// ── Placeholder Image ─────────────────────────────────────────────────────────
 
 class _PlaceholderImage extends StatelessWidget {
   final String label;
   final double height;
   final double radius;
 
-  const _PlaceholderImage({
-    required this.label,
-    required this.height,
-    this.radius = 12,
-  });
+  const _PlaceholderImage({required this.label, required this.height, this.radius = 12});
 
   @override
   Widget build(BuildContext context) {
@@ -405,23 +327,18 @@ class _PlaceholderImage extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Grid lines for texture
             CustomPaint(painter: _GridPainter(), size: Size.infinite),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.image_outlined,
-                    color: Colors.white.withOpacity(0.2), size: 36),
+                Icon(Icons.image_outlined, color: Colors.white.withOpacity(0.2), size: 36),
                 const SizedBox(height: 8),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.25),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.5,
-                  ),
-                ),
+                Text(label,
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.25),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5)),
               ],
             ),
           ],
@@ -450,7 +367,7 @@ class _GridPainter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
-// ── Tag chip ──────────────────────────────────────────────────────────────────
+// ── Tag ───────────────────────────────────────────────────────────────────────
 
 class _Tag extends StatelessWidget {
   final String label;
@@ -465,20 +382,16 @@ class _Tag extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(
-            color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w500),
-      ),
+      child: Text(label,
+          style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w500)),
     );
   }
 }
 
-// ── Buy button ────────────────────────────────────────────────────────────────
+// ── Buy Button ────────────────────────────────────────────────────────────────
 
 class _BuyButton extends StatefulWidget {
-  final VoidCallback onTap;
-  const _BuyButton({required this.onTap});
+  const _BuyButton();
 
   @override
   State<_BuyButton> createState() => _BuyButtonState();
@@ -491,10 +404,7 @@ class _BuyButtonState extends State<_BuyButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) {
-        setState(() => _pressed = false);
-        widget.onTap();
-      },
+      onTapUp: (_) => setState(() => _pressed = false),
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 110),
@@ -508,30 +418,18 @@ class _BuyButtonState extends State<_BuyButton> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: _pressed
               ? []
-              : [
-                  BoxShadow(
-                    color: const Color(0xFFFF3B30).withOpacity(0.38),
-                    blurRadius: 16,
-                    offset: const Offset(0, 5),
-                  )
-                ],
+              : [BoxShadow(color: const Color(0xFFFF3B30).withOpacity(0.38), blurRadius: 16, offset: const Offset(0, 5))],
         ),
         child: const Center(
-          child: Text(
-            'Buy',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                letterSpacing: 0.3),
-          ),
+          child: Text('Buy',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: 0.3)),
         ),
       ),
     );
   }
 }
 
-// ── Wishlist button ───────────────────────────────────────────────────────────
+// ── Wishlist Button ───────────────────────────────────────────────────────────
 
 class _WishlistButton extends StatelessWidget {
   final bool active;
@@ -547,14 +445,10 @@ class _WishlistButton extends StatelessWidget {
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          color: active
-              ? const Color(0xFFFF3B30).withOpacity(0.18)
-              : Colors.white.withOpacity(0.08),
+          color: active ? const Color(0xFFFF3B30).withOpacity(0.18) : Colors.white.withOpacity(0.08),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: active
-                ? const Color(0xFFFF3B30).withOpacity(0.5)
-                : Colors.white.withOpacity(0.12),
+            color: active ? const Color(0xFFFF3B30).withOpacity(0.5) : Colors.white.withOpacity(0.12),
           ),
         ),
         child: Icon(
@@ -567,7 +461,7 @@ class _WishlistButton extends StatelessWidget {
   }
 }
 
-// ── Section header ────────────────────────────────────────────────────────────
+// ── Section Header ────────────────────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
   final String title;
@@ -578,29 +472,19 @@ class _SectionHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.2),
-        ),
+        Text(title,
+            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700, letterSpacing: -0.2)),
         const SizedBox(height: 6),
         Container(
-          width: 32,
-          height: 2.5,
-          decoration: BoxDecoration(
-            color: const Color(0xFFFF3B30),
-            borderRadius: BorderRadius.circular(2),
-          ),
+          width: 32, height: 2.5,
+          decoration: BoxDecoration(color: const Color(0xFFFF3B30), borderRadius: BorderRadius.circular(2)),
         ),
       ],
     );
   }
 }
 
-// ── Feature tile ──────────────────────────────────────────────────────────────
+// ── Feature Tile ──────────────────────────────────────────────────────────────
 
 class _FeatureTile extends StatelessWidget {
   final String title;
@@ -615,13 +499,9 @@ class _FeatureTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 3,
-            height: 14,
+            width: 3, height: 14,
             margin: const EdgeInsets.only(top: 3, right: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFF3B30),
-              borderRadius: BorderRadius.circular(2),
-            ),
+            decoration: BoxDecoration(color: const Color(0xFFFF3B30), borderRadius: BorderRadius.circular(2)),
           ),
           Expanded(
             child: Column(
@@ -629,10 +509,7 @@ class _FeatureTile extends StatelessWidget {
               children: [
                 Text(title,
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.4)),
+                        color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700, letterSpacing: 0.4)),
                 const SizedBox(height: 4),
                 Text(body, style: _bodyStyle),
               ],
@@ -644,7 +521,7 @@ class _FeatureTile extends StatelessWidget {
   }
 }
 
-// ── Requirements card ─────────────────────────────────────────────────────────
+// ── Requirements Card ─────────────────────────────────────────────────────────
 
 class _ReqCard extends StatelessWidget {
   final String heading;
@@ -663,52 +540,30 @@ class _ReqCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            heading,
-            style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 14),
-          ),
+          Text(heading,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
           const SizedBox(height: 10),
-          ...items.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, right: 8),
-                    child: Container(
-                      width: 4,
-                      height: 4,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFF3B30),
-                        shape: BoxShape.circle,
+          ...items.map((item) => Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, right: 8),
+                      child: Container(
+                        width: 4, height: 4,
+                        decoration: const BoxDecoration(color: Color(0xFFFF3B30), shape: BoxShape.circle),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Text(item,
-                        style: TextStyle(
-                            color: Colors.white.withOpacity(0.65),
-                            fontSize: 12,
-                            height: 1.5)),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                    Expanded(
+                      child: Text(item,
+                          style: TextStyle(color: Colors.white.withOpacity(0.65), fontSize: 12, height: 1.5)),
+                    ),
+                  ],
+                ),
+              )),
         ],
       ),
     );
   }
 }
-
-// ── Shared styles ─────────────────────────────────────────────────────────────
-
-final _bodyStyle = TextStyle(
-  color: Colors.white.withOpacity(0.7),
-  fontSize: 13.5,
-  height: 1.65,
-);

@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_last_app/layout/GamePage.dart';
 import 'package:flutter_last_app/layout/Profile.dart';
 
-
-void main() {
-  runApp(const Home());
-}
-
 class Home extends StatelessWidget {
   const Home({super.key});
 
@@ -133,24 +128,6 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-//  return OutlinedButton(
-//       onPressed: () {
-//         Navigator.push(
-//           context,
-//           MaterialPageRoute(
-//             builder: (context) => const GamePage(), // Now matches GamePage.dart
-//           ),
-//         );
-//       },
-//       style: OutlinedButton.styleFrom(
-//         side: const BorderSide(color: Colors.white, width: 1.2),
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-//         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
-//       ),
-//       child: const Text("BUY"), // Removed the nested ElevatedButton
-//     );
-
-//  child: const Icon(Icons.person_outline, color: Color(0xFFCCCCCC), size: 22),
 // ─── Section Title ────────────────────────────────────────────────────────────
 
 class _SectionTitle extends StatelessWidget {

@@ -1,64 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_last_app/layout/Home.dart';
+import 'package:flutter_last_app/layout/MyGame.dart';
+import 'package:flutter_last_app/layout/Wishlist.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-void main() {
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-    ),
-  );
-  runApp(const Profile());
-}
-
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Profile',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFFF3B30),
-          surface: Color(0xFF141414),
-        ),
-      ),
-      home: const ProfileScreen(),
-    );
-  }
+  State<Profile> createState() => _ProfileState();
 }
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeIn;
-  late Animation<Offset> _slideUp;
+class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fadeIn;
+  late final Animation<Offset> _slideUp;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
     _fadeIn = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-    _slideUp = Tween<Offset>(
-      begin: const Offset(0, 0.08),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _slideUp = Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
     _controller.forward();
   }
 
@@ -82,29 +44,19 @@ class _ProfileScreenState extends State<ProfileScreen>
                 // Top bar
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                     child: Row(
                       children: [
-                        _IconBtn(
-                          icon: Icons.arrow_back_ios_new_rounded,
-                          onTap: () {},
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded),
                         ),
                         const Spacer(),
-                        const Text(
-                          'Profile',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
-                          ),
-                        ),
+                        const Text('Profile',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700, letterSpacing: 0.4)),
                         const Spacer(),
-                        _IconBtn(
-                          icon: Icons.more_horiz_rounded,
-                          onTap: () {},
-                        ),
+                        _IconBtn(icon: Icons.more_horiz_rounded, onTap: () {}),
                       ],
                     ),
                   ),
@@ -119,109 +71,69 @@ class _ProfileScreenState extends State<ProfileScreen>
                         Stack(
                           clipBehavior: Clip.none,
                           children: [
-                            // Glow ring
                             Container(
-                              width: 110,
-                              height: 110,
+                              width: 110, height: 110,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 gradient: const SweepGradient(
                                   colors: [
-                                    Color(0xFFFF3B30),
-                                    Color(0xFFFF9500),
-                                    Color(0xFF34C759),
-                                    Color(0xFF007AFF),
-                                    Color(0xFFFF3B30),
+                                    Color(0xFFFF3B30), Color(0xFFFF9500), Color(0xFF34C759),
+                                    Color(0xFF007AFF), Color(0xFFFF3B30),
                                   ],
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color(0xFFFF3B30)
-                                        .withOpacity(0.35),
-                                    blurRadius: 24,
-                                    spreadRadius: 2,
+                                    color: const Color(0xFFFF3B30).withOpacity(0.35),
+                                    blurRadius: 24, spreadRadius: 2,
                                   ),
                                 ],
                               ),
                             ),
-                            // Avatar
                             Positioned(
-                              top: 3,
-                              left: 3,
+                              top: 3, left: 3,
                               child: Container(
-                                width: 104,
-                                height: 104,
+                                width: 104, height: 104,
                                 decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xFF1C1C1E),
-                                ),
+                                    shape: BoxShape.circle, color: Color(0xFF1C1C1E)),
                                 child: const Center(
-                                  child: Text(
-                                    'A',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 44,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
+                                  child: Text('A',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 44, fontWeight: FontWeight.w800)),
                                 ),
                               ),
                             ),
-                            // Edit badge
                             Positioned(
-                              bottom: 0,
-                              right: -4,
+                              bottom: 0, right: -4,
                               child: GestureDetector(
                                 onTap: () {},
                                 child: Container(
-                                  width: 32,
-                                  height: 32,
+                                  width: 32, height: 32,
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFFF3B30),
                                     shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color(0xFF0A0A0A),
-                                      width: 2.5,
-                                    ),
+                                    border: Border.all(color: const Color(0xFF0A0A0A), width: 2.5),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(0xFFFF3B30)
-                                            .withOpacity(0.5),
-                                        blurRadius: 10,
-                                      ),
+                                          color: const Color(0xFFFF3B30).withOpacity(0.5),
+                                          blurRadius: 10),
                                     ],
                                   ),
-                                  child: const Icon(
-                                    Icons.edit_rounded,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
+                                  child: const Icon(Icons.edit_rounded, size: 14, color: Colors.white),
                                 ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 18),
-                        const Text(
-                          'usernameiscoolhaha',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
+                        const Text('usernameiscoolhaha',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
                         const SizedBox(height: 4),
-                        Text(
-                          'Level 42 · 1,284 hrs played',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.45),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        Text('Level 42 · 1,284 hrs played',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.45),
+                                fontSize: 13, fontWeight: FontWeight.w500)),
                         const SizedBox(height: 20),
-                        // Stats row
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -237,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                 ),
 
-                // Section: Library
+                // Library section
                 SliverToBoxAdapter(
                   child: _Section(
                     title: 'Library',
@@ -246,56 +158,56 @@ class _ProfileScreenState extends State<ProfileScreen>
                         icon: Icons.sports_esports_rounded,
                         label: 'My Games',
                         trailing: '38',
-                        onTap: () {},
-                      ),
-                      _MenuTile(
-                        icon: Icons.group_rounded,
-                        label: 'Friends',
-                        trailing: '12 online',
                         trailingColor: const Color(0xFF34C759),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MyGame()),
+                          );
+                        },
                       ),
                       _MenuTile(
-                        icon: Icons.bookmark_rounded,
-                        label: 'Wishlist',
-                        trailing: '7',
-                        onTap: () {},
-                        showDivider: false,
+                          icon: Icons.group_rounded,
+                          label: 'Friends',
+                          trailing: '12 online',
+                          trailingColor: const Color(0xFF34C759),
+                          onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Wishlist()),
+                          );
+                        },
                       ),
+                      _MenuTile(
+                          icon: Icons.bookmark_rounded,
+                          label: 'Wishlist',
+                          trailing: '7',
+                          onTap: () {},
+                          showDivider: false),
                     ],
                   ),
                 ),
 
                 const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-                // Section: Account
+                // Account section
                 SliverToBoxAdapter(
                   child: _Section(
                     title: 'Account',
                     children: [
+                      _MenuTile(icon: Icons.mail_outline_rounded, label: 'myacc****@email.com', onTap: () {}),
                       _MenuTile(
-                        icon: Icons.mail_outline_rounded,
-                        label: 'myacc****@email.com',
-                        onTap: () {},
-                      ),
-                      _MenuTile(
-                        icon: Icons.lock_outline_rounded,
-                        label: '••••••••••••••',
-                        labelStyle: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18,
-                          letterSpacing: 2,
-                        ),
-                        onTap: () {},
-                        showDivider: false,
-                      ),
+                          icon: Icons.lock_outline_rounded,
+                          label: '••••••••••••••',
+                          labelStyle: const TextStyle(color: Colors.white70, fontSize: 18, letterSpacing: 2),
+                          onTap: () {},
+                          showDivider: false),
                     ],
                   ),
                 ),
 
                 const SliverToBoxAdapter(child: SizedBox(height: 28)),
 
-                // Log out button
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -313,19 +225,17 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Widget _divider() => Container(
-        width: 1,
-        height: 28,
+        width: 1, height: 28,
         margin: const EdgeInsets.symmetric(horizontal: 20),
         color: Colors.white12,
       );
 }
 
-// ─── Widgets ────────────────────────────────────────────────────────────────
+// ── Widgets ───────────────────────────────────────────────────────────────────
 
 class _IconBtn extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
-
   const _IconBtn({required this.icon, required this.onTap});
 
   @override
@@ -333,12 +243,9 @@ class _IconBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 38,
-        height: 38,
+        width: 38, height: 38,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.07),
-          borderRadius: BorderRadius.circular(12),
-        ),
+            color: Colors.white.withOpacity(0.07), borderRadius: BorderRadius.circular(12)),
         child: Icon(icon, color: Colors.white70, size: 18),
       ),
     );
@@ -348,30 +255,18 @@ class _IconBtn extends StatelessWidget {
 class _StatChip extends StatelessWidget {
   final String label;
   final String value;
-
   const _StatChip({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
+        Text(value,
+            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800)),
         const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.45),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        Text(label,
+            style: TextStyle(
+                color: Colors.white.withOpacity(0.45), fontSize: 12, fontWeight: FontWeight.w500)),
       ],
     );
   }
@@ -380,7 +275,6 @@ class _StatChip extends StatelessWidget {
 class _Section extends StatelessWidget {
   final String title;
   final List<Widget> children;
-
   const _Section({required this.title, required this.children});
 
   @override
@@ -392,15 +286,10 @@ class _Section extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 10, left: 4),
-            child: Text(
-              title.toUpperCase(),
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.35),
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.4,
-              ),
-            ),
+            child: Text(title.toUpperCase(),
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.35),
+                    fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.4)),
           ),
           Container(
             decoration: BoxDecoration(
@@ -460,63 +349,38 @@ class _MenuTileState extends State<_MenuTile> {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
               child: Row(
                 children: [
                   Container(
-                    width: 36,
-                    height: 36,
+                    width: 36, height: 36,
                     decoration: BoxDecoration(
                       color: const Color(0xFFFF3B30).withOpacity(0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(
-                      widget.icon,
-                      color: const Color(0xFFFF3B30),
-                      size: 18,
-                    ),
+                    child: Icon(widget.icon, color: const Color(0xFFFF3B30), size: 18),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
-                    child: Text(
-                      widget.label,
-                      style: widget.labelStyle ??
-                          const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
+                    child: Text(widget.label,
+                        style: widget.labelStyle ??
+                            const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500)),
                   ),
                   if (widget.trailing != null) ...[
-                    Text(
-                      widget.trailing!,
-                      style: TextStyle(
-                        color: widget.trailingColor ??
-                            Colors.white.withOpacity(0.4),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Text(widget.trailing!,
+                        style: TextStyle(
+                            color: widget.trailingColor ?? Colors.white.withOpacity(0.4),
+                            fontSize: 13, fontWeight: FontWeight.w600)),
                     const SizedBox(width: 6),
                   ],
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: Colors.white.withOpacity(0.25),
-                    size: 20,
-                  ),
+                  Icon(Icons.chevron_right_rounded, color: Colors.white.withOpacity(0.25), size: 20),
                 ],
               ),
             ),
             if (widget.showDivider)
               Divider(
-                height: 1,
-                thickness: 1,
-                indent: 68,
-                endIndent: 0,
-                color: Colors.white.withOpacity(0.06),
-              ),
+                  height: 1, thickness: 1, indent: 68,
+                  color: Colors.white.withOpacity(0.06)),
           ],
         ),
       ),
@@ -556,13 +420,7 @@ class _LogoutButtonState extends State<_LogoutButton> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: _pressed
               ? []
-              : [
-                  BoxShadow(
-                    color: const Color(0xFFFF3B30).withOpacity(0.4),
-                    blurRadius: 20,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+              : [BoxShadow(color: const Color(0xFFFF3B30).withOpacity(0.4), blurRadius: 20, offset: const Offset(0, 6))],
         ),
         child: const Center(
           child: Row(
@@ -570,15 +428,9 @@ class _LogoutButtonState extends State<_LogoutButton> {
             children: [
               Icon(Icons.logout_rounded, color: Colors.white, size: 18),
               SizedBox(width: 8),
-              Text(
-                'Log Out',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.3,
-                ),
-              ),
+              Text('Log Out',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.3)),
             ],
           ),
         ),
