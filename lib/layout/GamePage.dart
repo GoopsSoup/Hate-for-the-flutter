@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Pay.dart';
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -420,15 +421,21 @@ class _BuyButtonState extends State<_BuyButton> {
               ? []
               : [BoxShadow(color: const Color(0xFFFF3B30).withOpacity(0.38), blurRadius: 16, offset: const Offset(0, 5))],
         ),
-        child: const Center(
-          child: Text('Buy',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: 0.3)),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => const Payment()
+              ),
+            );
+          }, 
+          child: Text('Buy',),
         ),
       ),
     );
   }
 }
-
+// style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: 0.3
 // ── Wishlist Button ───────────────────────────────────────────────────────────
 
 class _WishlistButton extends StatelessWidget {
